@@ -1,10 +1,10 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns'
 
 const NewPost = ({
   posts,
   setPosts,
-  format,
   postTitle,
   setPostTitle,
   postBody,
@@ -13,11 +13,12 @@ const NewPost = ({
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    e.preventdefault();
+    e.preventDefault();  //used preventdefault (error) preventDefault (works)
     const id = posts.length ? posts[posts.length - 1].id + 1 : 1;
     const datetime = format(new Date(), 'MMMM dd, yyyy pp');
-    const newPost = { id, title: postTitle, datetime, body: postBody };
-    const allPosts = [...posts, newPost];
+    const newPost = { id: id, title: postTitle, datetime: datetime, body: postBody };
+    const allPosts = [ ...posts, newPost ];
+    console.log(allPosts);
     setPosts(allPosts);
     setPostTitle('');
     setPostBody('');
@@ -29,10 +30,9 @@ const NewPost = ({
       <h2>New Post</h2>
       <form
         className="newPostForm"
-        action=""
-        onSubmit={(e)=>handleSubmit(e)}
+        onSubmit={handleSubmit}
       >
-        <label htmlFor="postTitle">Title</label>
+        <label htmlFor="postTitle">Title:</label>
         <input
           type="text"
           id="postTitle"
@@ -40,7 +40,7 @@ const NewPost = ({
           value={postTitle}
           onChange={(e) => setPostTitle(e.target.value)} />
 
-        <label htmlFor="postBody">Post</label>
+        <label htmlFor="postBody">Post:</label>
         <textarea
           type="text"
           id='postBody'
