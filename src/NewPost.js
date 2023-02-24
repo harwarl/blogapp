@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns'
+import api from './api/posts'
 
 const NewPost = ({
   posts,
@@ -12,17 +13,21 @@ const NewPost = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();  //used preventdefault (error) preventDefault (works)
     const id = posts.length ? posts[posts.length - 1].id + 1 : 1;
     const datetime = format(new Date(), 'MMMM dd, yyyy pp');
     const newPost = { id: id, title: postTitle, datetime: datetime, body: postBody };
-    const allPosts = [ ...posts, newPost ];
-    console.log(allPosts);
-    setPosts(allPosts);
-    setPostTitle('');
-    setPostBody('');
-    navigate('/');
+    try{
+      const response = await api.post('/posts', newPost);
+      const allPosts = [ ...posts, response.data];
+      setPosts(allPosts);
+      setPostTitle('');
+      setPostBody('');
+      navigate('/');
+    }catch(err){
+      console.log(`Error: ${err.message}`);
+    }
   }
 
   return (

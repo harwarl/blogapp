@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import api from './api/posts'
 
 const PostPage = ({ posts, setPosts}) => {
   const { id } = useParams();
@@ -7,10 +8,15 @@ const PostPage = ({ posts, setPosts}) => {
   
   const navigate = useNavigate();
   
-  const handleDelete = (id) =>{
-    const postLeft = posts.filter((post)=>(post.id !== id))
-    setPosts(postLeft);
-    navigate('/');
+  const handleDelete = async(id) =>{
+    try{
+      await api.delete(`/posts/${id}`)
+      const postLeft = posts.filter((post)=>(post.id !== id))
+      setPosts(postLeft);
+      navigate('/');
+    }catch(err){
+
+    }
   }
 
   return (
@@ -20,7 +26,13 @@ const PostPage = ({ posts, setPosts}) => {
           <h2>{post.title}</h2>
           <p className='postDate'>{post.datetime}</p>
           <p className='postBody'>{post.body}</p>
+          <Link to={`/edit/${post.id}`}>
+            <button className='editButton'>
+              Edit Post
+            </button>
+          </Link>
           <button
+          className='deleteButton'
             onClick={() => handleDelete(post.id)}
           >
             Delete Post
