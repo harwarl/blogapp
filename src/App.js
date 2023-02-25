@@ -8,11 +8,6 @@ import About from './About';
 import Missing from './Missing';
 import Footer from './Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { format } from 'date-fns';
-import api from './api/posts'
-import useWindowSize from './hooks/useWindowSize';
-import useAxiosFetch from './hooks/useAxiosFetch';
 import { DataProvider } from './context/DataContext';
 
 function App() {
@@ -48,7 +43,7 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/post' element={<NewPost />} />
             <Route path='/post/:id' element={<PostPage />} />
-            <Route path='/edit/:id' element={<EditPost />} />
+            <Route path='/post/edit/:id' element={<EditPost />} />
             <Route path='/about' element={<About />} />
             <Route path='*' element={<Missing />} />
           </Routes>

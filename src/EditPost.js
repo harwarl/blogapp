@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { format } from 'date-fns';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate} from 'react-router-dom';
 import api from './api/posts';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import DataContext from './context/DataContext';
 
 
@@ -10,12 +10,13 @@ const EditPost = () => {
     const {posts, editTitle, editBody, setPosts, setEditBody, setEditTitle} = useContext(DataContext);
     const { id } = useParams();
     const navigate = useNavigate();
+    const post = posts.find(post => (post.id).toString() === id)
 
     const handleEdit = async(id) =>{
         const datetime = format(new Date(), 'MMMM dd, yyyy pp');
         const updatedPost = { id: id, title: editTitle, datetime: datetime, body: editBody };
         try{
-          const response = await api.put(`'/posts/${id}`, updatedPost)
+          const response = await api.put(`/posts/${id}`, updatedPost)
           setPosts(posts.map((post)=>post.id === id ? {...response.data} : post))
           setEditTitle('');
           setEditBody('');
@@ -25,7 +26,13 @@ const EditPost = () => {
         }
       }
 
-    const post = posts.find(post => (post.id).toString() === id)
+    useEffect(()=>{
+        if(post){
+            setEditTitle(post.title);
+            setEditBody(post.body);
+        }
+    }, [post, setEditTitle, setEditBody])
+
     return (
         <main className='NewPost'>
             {editTitle &&
@@ -33,7 +40,7 @@ const EditPost = () => {
                     <h2>Edit Post</h2>
                     <form
                         className="newPostForm"
-                        onSubmit={(e)=>{e.preventDefault()}}
+                        onSubmit={(e)=>e.preventDefault()}
                     >
                         <label htmlFor="postTitle">Title:</label>
                         <input
@@ -46,6 +53,7 @@ const EditPost = () => {
                         <label htmlFor="postBody">Post:</label>
                         <textarea
                             type="text"
+                            required
                             id='postBody'
                             value={editBody}
                             onChange={(e) => setEditBody(e.target.value)} />
