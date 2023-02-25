@@ -1,6 +1,6 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import React from 'react';
+import { format } from 'date-fns';
+import { useParams, Link } from 'react-router-dom';
 import api from './api/posts';
 import { useNavigate } from 'react-router-dom';
 
