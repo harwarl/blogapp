@@ -1,8 +1,5 @@
 import { createContext } from "react";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { format } from 'date-fns';
-import api from '../api/posts'
 import useWindowSize from '../hooks/useWindowSize';
 import useAxiosFetch from '../hooks/useAxiosFetch';
 
